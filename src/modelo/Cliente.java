@@ -5,8 +5,12 @@
 package modelo;
 
 import DAO.ClienteDAO;
+import connection.ConexaoMySQL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
-
 
 /**
  *
@@ -63,11 +67,20 @@ public class Cliente extends ModelPessoa {
     @Override
     public void gerarCod(Object obj ) {
         
-       ArrayList<Cliente> c  = (ArrayList<Cliente>) obj;
-        
-       if (c != null) {
-         this.codCliente = c.size();
-       }
+    try (Connection conn = ConexaoMySQL.getConexaoMySQL()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT count(*) FROM clientes");
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                // Extrai o valor do ResultSet e atribui à variável codCliente
+                this.codCliente = rs.getInt(1);
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("Erro: Não consegui gerar o número do pedido");
+            System.out.println(ex);
+        }
     }
     
     
