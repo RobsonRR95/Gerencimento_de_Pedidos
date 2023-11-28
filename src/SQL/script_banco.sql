@@ -1,5 +1,7 @@
 CREATE DATABASE IF NOT EXISTS `projeto_final`;
 
+USE `projeto_final`;
+
 CREATE TABLE `pessoas` (
 	`cpf` bigint NOT NULL PRIMARY KEY,
 	`rg` bigint  NOT NULL,
