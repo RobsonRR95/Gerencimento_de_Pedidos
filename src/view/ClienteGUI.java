@@ -22,7 +22,7 @@ public class ClienteGUI extends javax.swing.JFrame {
     ClienteDAO cliente = new ClienteDAO();
 
     //recupera os dados do cadastro para dentro do ArrayList cad
-    ArrayList<Cliente> cad = cliente.getCadastro();
+    ArrayList<Cliente> cad = cliente.list();
     
     //sinaliza a bandeira
     int operacao = 1;
@@ -63,13 +63,12 @@ public class ClienteGUI extends javax.swing.JFrame {
                 DefaultTableModel model = (DefaultTableModel) tbClientes.getModel();
                 Object[] rowData = {""};
                 model.addRow(rowData);
-                tbClientes.setValueAt(cad.get(i).getCodCliente(), i, 0);
-                tbClientes.setValueAt(cad.get(i).getNome(), i, 1);
-                tbClientes.setValueAt(cad.get(i).getTelefone(), i, 2);
-                tbClientes.setValueAt(cad.get(i).getEnderco(), i, 3);
-                tbClientes.setValueAt(cad.get(i).getNumero(), i, 4);
-                tbClientes.setValueAt(cad.get(i).getBairro(), i, 5);
-                tbClientes.setValueAt(cad.get(i).getCidade(), i, 6);
+                tbClientes.setValueAt(cad.get(i).getNome(), i, 0);
+                tbClientes.setValueAt(cad.get(i).getTelefone(), i, 1);
+                tbClientes.setValueAt(cad.get(i).getEnderco(), i, 2);
+                tbClientes.setValueAt(cad.get(i).getNumero(), i, 3);
+                tbClientes.setValueAt(cad.get(i).getBairro(), i, 4);
+                tbClientes.setValueAt(cad.get(i).getCidade(), i, 5);
             }
         }
 
@@ -286,11 +285,11 @@ public class ClienteGUI extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Cod", "Nome", "Telefone", "Endereço", "Número", "Bairro", "Cidade"
+                "Nome", "Telefone", "Endereço", "Número", "Bairro", "Cidade"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -378,7 +377,9 @@ public class ClienteGUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(cadastroClientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(cadastroClientes, javax.swing.GroupLayout.DEFAULT_SIZE, 928, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

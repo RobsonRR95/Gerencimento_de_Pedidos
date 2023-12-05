@@ -85,6 +85,11 @@ public class PrincipalGUI extends javax.swing.JFrame {
 
         jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons/user.png"))); // NOI18N
         jMenuItem3.setText("Usuário");
+        jMenuItem3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenuItem3MouseClicked(evt);
+            }
+        });
         jMenu5.add(jMenuItem3);
 
         jMenuItem4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons/door_out.png"))); // NOI18N
@@ -119,6 +124,10 @@ public class PrincipalGUI extends javax.swing.JFrame {
     private void jMenu8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu8MouseClicked
         new ClienteGUI().setVisible(true);
     }//GEN-LAST:event_jMenu8MouseClicked
+
+    private void jMenuItem3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem3MouseClicked
+        System.exit(0);
+    }//GEN-LAST:event_jMenuItem3MouseClicked
 
     /**
      * @param args the command line arguments

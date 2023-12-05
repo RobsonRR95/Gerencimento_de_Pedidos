@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.JOptionPane;
 import modelo.Cliente;
+import modelo.ModelPessoa;
 import connection.ConexaoMySQL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
@@ -27,7 +29,7 @@ public class ClienteDAO implements OperacoesDAO {
        
         /*esse metodo recebe um objeto, verifica se não é nulo, 
 	converte para Cliente ;
-	salva no final do ArrayList*/
+	salva no final da tabela cliente*/
     @Override
     public boolean inserir(Object obj) {
         if (obj != null) {
@@ -80,15 +82,29 @@ public class ClienteDAO implements OperacoesDAO {
     /*esse metodo recebe um objeto, verifica se não é nulo, 
 	converte para Cliente ;
 	busca o cod do cliente, 
-	seta o Ativo como false e grava na mesma posição do ArrayList*/
+	seta o Ativo como false e grava na mesma posição da tabela cliente*/
     @Override
     public boolean excluir(Object obj) {
         if (obj !=null){
-           Cliente pNovo = (Cliente) obj;
-           int index = pNovo.getCodCliente() -1;
-           pNovo.setAtivo(false);
-           cadastro.set(index, pNovo);
-           return true;
+           Cliente cNovo = (Cliente) obj;
+           
+           
+           try {
+                Connection conn = ConexaoMySQL.getConexaoMySQL();
+                PreparedStatement ps = conn.prepareStatement("UPDATE clientes SET ativo=1,  WHERE cpf=?");
+                 
+                ps.setLong(1, cNovo.getCpf());
+                                 
+                int rowCount = ps.executeUpdate();        
+                     
+                conn.close();
+     
+                return true;            
+                 
+           } catch (SQLException ex) {
+                System.out.println("Erro: Não consegui excluir o cliente");
+                System.out.println(ex);
+           } 
         }
         return false;
     }
@@ -126,12 +142,43 @@ public class ClienteDAO implements OperacoesDAO {
     }
       
    /*esse metodo lista todas as posições do ArrayList*/  
-    public void listar(){
-        Iterator it = cadastro.iterator();
-        while (it.hasNext()){
-            System.out.println(it.next());
-        }
-        
+    public ArrayList<Cliente> list(){
+
+        ArrayList <Cliente> minhaLista = new ArrayList<Cliente>();
+
+            try {
+                Connection conn = ConexaoMySQL.getConexaoMySQL();
+                PreparedStatement ps = conn.prepareStatement("SELECT * FROM pessoas");             
+                ResultSet rs = ps.executeQuery();
+
+                    while(rs.next()){  
+                    long cpf = rs.getLong(1);
+                    String nome = rs.getString(3);
+                    Cliente c  = new Cliente(nome, cpf);
+                    
+                    c.setRg(rs.getLong(2));
+                    c.setEndereco(rs.getString(4));
+                    c.setNumero(rs.getInt(5));
+                    c.setEstado(rs.getString(6));
+                    c.setTelefone(rs.getLong(7));
+                    c.setAtivo(rs.getBoolean(8));
+                    c.setObs(rs.getString(9));
+                    c.setBairro(rs.getString(10));
+                    c.setCidade(rs.getString(11));
+                    c.setApto(rs.getInt(12));
+                    c.setCep(rs.getInt(13));            
+                    
+                    minhaLista.add(c);
+                }         
+                    
+                conn.close();
+                
+           } catch (SQLException ex) {
+                System.out.println("Erro: Não consegui listar os clientes");
+                System.out.println(ex);
+           } 
+            
+         return minhaLista; 
     }
 
     // esse metodo retorna o cadastro

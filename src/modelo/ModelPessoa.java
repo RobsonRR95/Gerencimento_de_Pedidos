@@ -130,8 +130,8 @@ public abstract class ModelPessoa {
     }
 
   
-    public void setSexo (String pDataNascimento){
-        this.sexo = pDataNascimento;
+    public void setSexo (String pSexo){
+        this.sexo = pSexo;
     }
   
     public String getSexo(){
