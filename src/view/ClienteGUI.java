@@ -535,7 +535,7 @@ public class ClienteGUI extends javax.swing.JFrame {
 
         c.setObs(tfObservacao.getText());
 
-        //aqui é verificada qual a bandeira e chamado o metodo correspondente, 0 inserir, 1 editar ou 2 excluir
+        //aqui é verificada qual o botão e chamado o metodo correspondente, 0 inserir, 1 editar ou 2 excluir
         if (operacao == 0) {
             if (cliente.inserir(c)) {
                 JOptionPane.showMessageDialog(null, "Inserido com sucesso!!");
