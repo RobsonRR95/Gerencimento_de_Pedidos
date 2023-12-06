@@ -55,7 +55,8 @@ public class ClienteGUI extends javax.swing.JFrame {
         }*/
 
         // aqui verifica se o ArrayList não esta vazio, caso não esteja já popula a jtable
-        
+         ArrayList<Cliente> cad = cliente.list();
+         
          if (cad.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Cadastro vazio");
         } else {
@@ -543,7 +544,7 @@ public class ClienteGUI extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Erro na inserção do Cliente!!");
             }
         } else if (operacao == 1) {
-            c.setCodCliente(Integer.parseInt(tfCodigo.getText()));
+            //c.setCodCliente(Integer.parseInt(tfCodigo.getText()));
             if (cliente.editar(c)) {
                 JOptionPane.showMessageDialog(null, "Alterado com sucesso!!");
             } else {
@@ -581,15 +582,15 @@ public class ClienteGUI extends javax.swing.JFrame {
             model.addRow(rowData);
            }
            //seta os valores dos atributos do cliente nas colunas da tabela
+            cad = cliente.list();
             for (int i = 0; i <cad.size() ; i++) {
-
-                tbClientes.setValueAt(cad.get(i).getCodCliente(), i, 0);
-                tbClientes.setValueAt(cad.get(i).getNome(), i, 1);
-                tbClientes.setValueAt(cad.get(i).getTelefone(), i, 2);
-                tbClientes.setValueAt(cad.get(i).getEnderco(), i, 3);
-                tbClientes.setValueAt(cad.get(i).getNumero(), i, 4);
-                tbClientes.setValueAt(cad.get(i).getBairro(), i, 5);
-                tbClientes.setValueAt(cad.get(i).getCidade(), i, 6);
+                
+                tbClientes.setValueAt(cad.get(i).getNome(), i, 0);
+                tbClientes.setValueAt(cad.get(i).getTelefone(), i, 1);
+                tbClientes.setValueAt(cad.get(i).getEnderco(), i, 2);
+                tbClientes.setValueAt(cad.get(i).getNumero(), i, 3);
+                tbClientes.setValueAt(cad.get(i).getBairro(), i, 4);
+                tbClientes.setValueAt(cad.get(i).getCidade(), i, 5);
                 }
             }
         
@@ -636,20 +637,20 @@ public class ClienteGUI extends javax.swing.JFrame {
                     if (rowIndex >= 0) {
                         // Define a linha clicada como a linha selecionada
                         selectionModel.setSelectionInterval(rowIndex, rowIndex);
-                        Cliente selecionado = (Cliente) cliente.pesquisar(rowIndex + 1);
-                        tfCodigo.setText(String.valueOf(rowIndex + 1));
-                        tfNome.setText((String) selecionado.getNome());
-                        tfCelular.setText(String.valueOf(selecionado.getTelefone()));
-                        tfCpf.setText(String.valueOf(selecionado.getCpf()));
-                        tfRg.setText(String.valueOf(selecionado.getRg()));
-                        tfEndereco.setText((String) selecionado.getEndereco());
-                        tfNumero.setText(String.valueOf(selecionado.getNumero()));
-                        tfApto.setText(String.valueOf(selecionado.getApto()));
-                        tfBairro.setText(String.valueOf(selecionado.getBairro()));
-                        tfEstado.setText(String.valueOf(selecionado.getEstado()));
-                        tfCep.setText(String.valueOf(selecionado.getCep()));
-                        //tfCidade.setText((String) selecionado.getCidade());
-                        tfObservacao.setText((String) selecionado.getObs());
+                        //Cliente selecionado = (Cliente) cliente.pesquisar(rowIndex);
+                        tfCodigo.setText(String.valueOf(rowIndex));
+                        tfNome.setText( cad.get(rowIndex).getNome());
+                        tfCelular.setText(String.valueOf(cad.get(rowIndex).getTelefone()));
+                        tfCpf.setText(String.valueOf(cad.get(rowIndex).getCpf()));
+                        tfRg.setText(String.valueOf(cad.get(rowIndex).getRg()));
+                        tfEndereco.setText(cad.get(rowIndex+1).getEndereco());
+                        tfNumero.setText(String.valueOf(cad.get(rowIndex).getNumero()));
+                        tfApto.setText(String.valueOf(cad.get(rowIndex).getApto()));
+                        tfBairro.setText(cad.get(rowIndex).getBairro());
+                        tfEstado.setText(cad.get(rowIndex).getEstado());
+                        tfCep.setText(String.valueOf(cad.get(rowIndex).getCep()));
+                        //tfCidade.setText(cad.get(rowIndex).getCidade());
+                        tfObservacao.setText(cad.get(rowIndex).getObs());
                     }
                     //manipula os botões
                     btNovo.setEnabled(false);
