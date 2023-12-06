@@ -115,6 +115,44 @@ public class ClienteDAO implements OperacoesDAO {
      public Object pesquisar(Object obj) {
         if (obj !=null){
             int cod = (int) obj;
+            
+            
+             try {
+                Connection conn = ConexaoMySQL.getConexaoMySQL();
+                PreparedStatement ps = conn.prepareStatement("SELECT * FROM pessoas WHERE cpf=?");
+                 
+                ps.setInt(1, cod);
+                
+                ResultSet rs = ps.executeQuery();
+                
+                if(rs.next()){
+                    
+                    long cpf = rs.getLong(1);
+                    String nome = rs.getString(3);
+                    
+                    Cliente c  = new Cliente(nome, cpf);
+                    
+                    c.setRg(rs.getLong(2));
+                    c.setEndereco(rs.getString(4));
+                    c.setNumero(rs.getInt(5));
+                    c.setEstado(rs.getString(6));
+                    c.setTelefone(rs.getLong(7));
+                    c.setAtivo(rs.getBoolean(8));
+                    c.setObs(rs.getString(9));
+                    c.setBairro(rs.getString(10));
+                    c.setCidade(rs.getString(11));
+                    c.setApto(rs.getInt(12));
+                    c.setCep(rs.getInt(13));
+                                       
+                    return c;
+                }         
+                    
+                conn.close();
+                
+           } catch (SQLException ex) {
+                System.out.println("Erro: Não consegui conectar o no BD");
+                System.out.println(ex);
+           } 
             for (int i =0; i< cadastro.size(); i++){
                 Cliente p = (Cliente) cadastro.get(i);
                 if (cod==p.getCodCliente()){
@@ -133,10 +171,25 @@ public class ClienteDAO implements OperacoesDAO {
     @Override
     public boolean editar(Object obj) {
         if (obj !=null){
-           Cliente pNovo = (Cliente) obj;
-           int index = pNovo.getCodCliente() -1;
-           cadastro.set(index, pNovo);
-           return true;
+           Cliente cNovo = (Cliente) obj;
+           
+           
+           try {
+                Connection conn = ConexaoMySQL.getConexaoMySQL();
+                PreparedStatement ps = conn.prepareStatement("UPDATE clientes SET ativo=1,  WHERE cpf=?");
+                 
+                ps.setLong(1, cNovo.getCpf());
+                                 
+                int rowCount = ps.executeUpdate();        
+                     
+                conn.close();
+     
+                return true;            
+                 
+           } catch (SQLException ex) {
+                System.out.println("Erro: Não consegui alterar o cliente");
+                System.out.println(ex);
+           }
         }
         return false;
     }
