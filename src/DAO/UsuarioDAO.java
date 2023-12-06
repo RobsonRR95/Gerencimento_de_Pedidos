@@ -1,9 +1,12 @@
 package DAO;
 
 
+import java.sql.*;
+import connection.ConexaoMySQL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import modelo.Usuario;
+
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -66,12 +69,33 @@ public class UsuarioDAO implements OperacoesDAO {
         return false;
     }
         
-    public void listar(){
-        Iterator it = cadastro.iterator();
-        while (it.hasNext()){
-            System.out.println(it.next());
-        }
-        
+    /*esse metodo lista todas as posições do ArrayList*/  
+    public ArrayList<Usuario> list(){
+
+        ArrayList <Usuario> minhaLista = new ArrayList<Usuario>();
+
+            try {
+                Connection conn = ConexaoMySQL.getConexaoMySQL();
+                PreparedStatement ps = conn.prepareStatement("SELECT * FROM usuarios");             
+                ResultSet rs = ps.executeQuery();
+
+                    while(rs.next()){  
+                        Usuario u  = new Usuario();
+                        u.setCodUsuario(rs.getInt(1));
+                        u.setNomeUsuario(rs.getString(2));
+                        u.setSenha(rs.getString(3));          
+                    
+                    minhaLista.add(u);
+                }         
+                    
+                conn.close();
+                
+           } catch (SQLException ex) {
+                System.out.println("Erro: Não conseguiu listar os usuarios");
+                System.out.println(ex);
+           }  
+            
+         return minhaLista; 
     }
 
     public ArrayList<Usuario> getCadastro() {

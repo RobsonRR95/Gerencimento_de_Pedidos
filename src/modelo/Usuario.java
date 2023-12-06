@@ -12,13 +12,16 @@ public class Usuario extends ModelPessoa {
     
     private int codUsuario;
     private String nomeUsuario;
-    private int senha;
+    private String senha;
     private String dataCadastro;
 
-    public Usuario(String nomeUsuario, int senha, String dataCadastro) {
+    public Usuario(String nomeUsuario, String senha, String dataCadastro) {
         this.nomeUsuario = nomeUsuario;
         this.senha = senha;
         this.dataCadastro = dataCadastro;
+    }
+    public Usuario(){
+        
     }
 
     @Override
@@ -42,11 +45,11 @@ public class Usuario extends ModelPessoa {
         this.nomeUsuario = nomeUsuario;
     }
 
-    public int getSenha() {
+    public String getSenha() {
         return senha;
     }
 
-    public void setSenha(int senha) {
+    public void setSenha(String senha) {
         this.senha = senha;
     }
 

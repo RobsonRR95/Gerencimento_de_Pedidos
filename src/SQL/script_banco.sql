@@ -49,3 +49,15 @@ CREATE TABLE `clientes` (
         REFERENCES clientes (codCliente)
 );
 
+-- Criação da tabela de usuários
+CREATE TABLE usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL,
+    password VARCHAR(50) NOT NULL
+);
+
+-- Inserção de usuários
+INSERT INTO usuarios (username, password) VALUES
+('robson', '7777'),
+('marcio', '1234'),
+('teste', '1234');

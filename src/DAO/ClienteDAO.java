@@ -73,7 +73,7 @@ public class ClienteDAO implements OperacoesDAO {
                 Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-        return true;
+            return true;
         }
         return false;
     }
