@@ -20,6 +20,7 @@ public class Usuario extends ModelPessoa {
         this.senha = senha;
         this.dataCadastro = dataCadastro;
     }
+    
     public Usuario(){
         
     }
@@ -51,14 +52,6 @@ public class Usuario extends ModelPessoa {
 
     public void setSenha(String senha) {
         this.senha = senha;
-    }
-
-    public String getDataCadastro() {
-        return dataCadastro;
-    }
-
-    public void setDataCadastro(String dataCadastro) {
-        this.dataCadastro = dataCadastro;
     }
     
 }

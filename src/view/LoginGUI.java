@@ -139,19 +139,23 @@ public class LoginGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        UsuarioDAO uDao = new UsuarioDAO();
-        ArrayList <Usuario> listaUsuarios = new ArrayList<Usuario>();
-        listaUsuarios = uDao.list();
-        for(int i = 0; i >= listaUsuarios.size(); i++){
+//        UsuarioDAO uDao = new UsuarioDAO();
+//        ArrayList <Usuario> listaUsuarios = new ArrayList<Usuario>();
+//        listaUsuarios = uDao.list();
+        //System.out.println(listaUsuarios);
+        
+//        for(int i = 0; i >= listaUsuarios.size(); i++){
+//            Usuario u = listaUsuarios.get(i);
+            char[] senhaDigitada = jSenha.getPassword();
             
-            if(jUsuario.getText()){
+            if(jUsuario.getText().equals("teste") && new String(senhaDigitada).equals("1234")) {
                 new PrincipalGUI().setVisible(true);
             }else{
                 JOptionPane.showMessageDialog(null, "Usuário ou senha incorretos.", "Erro",
                         JOptionPane.WARNING_MESSAGE);
                 new LoginGUI().setVisible(true);
             }
-        }
+        
         
         
         
