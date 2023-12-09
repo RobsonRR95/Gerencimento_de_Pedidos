@@ -454,7 +454,7 @@ public class ClienteGUI extends javax.swing.JFrame {
         //criado objeto CLiente para polular com os dados e psterior ingresso do objeto no ArrayList
         Cliente c = new Cliente(nome, cpf);
         
-        //daqui para baixo foram feitas coonsistencias identicas as verificadas acima
+        //daqui para baixo foram feitas coonsistencias identicas as verificadas acima.
         if (!"".equals(tfCelular.getText())) {
             try {
                 c.setTelefone(Long.parseLong(tfCelular.getText()));
