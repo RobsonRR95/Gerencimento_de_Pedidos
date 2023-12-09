@@ -133,7 +133,7 @@ public class ClienteGUI extends javax.swing.JFrame {
         btSalvar = new javax.swing.JButton();
         btCancelar = new javax.swing.JButton();
         jLabel19 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        tfCidade = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Clientes");
@@ -193,7 +193,7 @@ public class ClienteGUI extends javax.swing.JFrame {
         cadastroClientes.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 230, 50, 30));
 
         jLabel12.setText("CEP");
-        cadastroClientes.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 190, -1, 30));
+        cadastroClientes.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 190, -1, 30));
 
         jLabel13.setText("ESTADO");
         cadastroClientes.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 190, -1, 30));
@@ -215,13 +215,13 @@ public class ClienteGUI extends javax.swing.JFrame {
         cadastroClientes.add(tfApto, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 150, 70, -1));
 
         tfBairro.setEnabled(false);
-        cadastroClientes.add(tfBairro, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 190, 190, -1));
+        cadastroClientes.add(tfBairro, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 190, 190, -1));
 
         tfEstado.setEnabled(false);
-        cadastroClientes.add(tfEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 190, 130, -1));
+        cadastroClientes.add(tfEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 190, 100, -1));
 
         tfCep.setEnabled(false);
-        cadastroClientes.add(tfCep, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 190, 70, -1));
+        cadastroClientes.add(tfCep, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 190, 80, -1));
 
         jLabel14.setText("OBS");
         cadastroClientes.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(482, 230, 30, 30));
@@ -371,8 +371,8 @@ public class ClienteGUI extends javax.swing.JFrame {
         jLabel19.setText("* Campos Obrigatórios.");
         cadastroClientes.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 630, -1, -1));
 
-        jComboBox1.setModel(new CidadesComboBoxModel());
-        cadastroClientes.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 230, -1, -1));
+        tfCidade.setEnabled(false);
+        cadastroClientes.add(tfCidade, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 230, 210, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -478,12 +478,12 @@ public class ClienteGUI extends javax.swing.JFrame {
             return;
         }
         
-        /*if (!"".equals(tfCidade.getText())) {
+        if (!"".equals(tfCidade.getText())) {
             c.setCidade(tfCidade.getText());
         } else {
                 JOptionPane.showMessageDialog(null, "O campo CIDADE é OBRIGATÓRIO!!");
                 return;
-        }*/
+        }
 
         if (!"".equals(tfApto.getText())) {
             try {
@@ -514,6 +514,7 @@ public class ClienteGUI extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "O campo NÚMERO é OBRIGATÓRIO!!");
                 return;
         }
+        
         
         if (!"".equals(tfEstado.getText())){
             if(!Util.isNumeric(tfEstado.getText())){
@@ -723,7 +724,6 @@ public class ClienteGUI extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cbPontos;
     private javax.swing.JComboBox<String> cbPublicidade;
     private javax.swing.JComboBox<String> cbTabela;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -753,6 +753,7 @@ public class ClienteGUI extends javax.swing.JFrame {
     private javax.swing.JTextField tfBairro;
     private javax.swing.JTextField tfCelular;
     private javax.swing.JTextField tfCep;
+    private javax.swing.JTextField tfCidade;
     private javax.swing.JLabel tfCodigo;
     private javax.swing.JTextField tfCpf;
     private javax.swing.JTextField tfEndereco;

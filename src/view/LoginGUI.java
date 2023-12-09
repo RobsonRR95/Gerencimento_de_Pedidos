@@ -50,6 +50,9 @@ public class LoginGUI extends javax.swing.JFrame {
 
         jLabel2.setText("Senha");
 
+        jSenha.setText("1234");
+
+        jUsuario.setText("teste");
         jUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jUsuarioActionPerformed(evt);
@@ -139,13 +142,7 @@ public class LoginGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-//        UsuarioDAO uDao = new UsuarioDAO();
-//        ArrayList <Usuario> listaUsuarios = new ArrayList<Usuario>();
-//        listaUsuarios = uDao.list();
-        //System.out.println(listaUsuarios);
-        
-//        for(int i = 0; i >= listaUsuarios.size(); i++){
-//            Usuario u = listaUsuarios.get(i);
+
             char[] senhaDigitada = jSenha.getPassword();
             
             if(jUsuario.getText().equals("teste") && new String(senhaDigitada).equals("1234")) {
@@ -156,10 +153,6 @@ public class LoginGUI extends javax.swing.JFrame {
                 new LoginGUI().setVisible(true);
             }
         
-        
-        
-        
-         
         dispose();// TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
