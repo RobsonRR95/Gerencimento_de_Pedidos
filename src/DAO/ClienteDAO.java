@@ -91,7 +91,8 @@ public class ClienteDAO implements OperacoesDAO {
            
            try {
                 Connection conn = ConexaoMySQL.getConexaoMySQL();
-                PreparedStatement ps = conn.prepareStatement("UPDATE clientes SET ativo=1,  WHERE cpf=?");
+                PreparedStatement ps = conn.prepareStatement("UPDATE pessoas SET ativo='1' WHERE cpf=?");
+                                                                    
                  
                 ps.setLong(1, cNovo.getCpf());
                                  
@@ -176,9 +177,22 @@ public class ClienteDAO implements OperacoesDAO {
            
            try {
                 Connection conn = ConexaoMySQL.getConexaoMySQL();
-                PreparedStatement ps = conn.prepareStatement("UPDATE clientes SET ativo=1,  WHERE cpf=?");
-                 
-                ps.setLong(1, cNovo.getCpf());
+                PreparedStatement ps = conn.prepareStatement("UPDATE pessoas SET rg=?, nome=?, endereco=?, numero=?, estado=?, telefone=?, ativo=?, obs=?, bairro=?, cidade=?, apto=?, cep=? WHERE cpf=?");
+                  
+                
+                ps.setLong(1, cNovo.getRg());
+                ps.setString(2, cNovo.getNome());
+                ps.setString(3, cNovo.getEndereco());
+                ps.setInt(4, cNovo.getNumero());
+                ps.setString(5, cNovo.getEstado());
+                ps.setLong(6,cNovo.getTelefone());
+                ps.setBoolean(7, cNovo.isAtivo());
+                ps.setString(8, cNovo.getObs());
+                ps.setString(9,cNovo.getBairro());
+                ps.setString(10, cNovo.getCidade());
+                ps.setInt(11, cNovo.getApto());
+                ps.setLong(12, cNovo.getCep());
+                ps.setLong(13, cNovo.getCpf());
                                  
                 int rowCount = ps.executeUpdate();        
                      
