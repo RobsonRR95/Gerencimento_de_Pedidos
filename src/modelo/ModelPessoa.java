@@ -23,7 +23,10 @@ public abstract class ModelPessoa {
     private String cidade;
     private int apto;
     private long cep;
-
+    private String inativo;
+    
+    
+    
     public long getRg() {
         return rg;
     }
@@ -59,7 +62,15 @@ public abstract class ModelPessoa {
     public void setObs(String obs) {
         this.obs = obs;
     }
+    
+    public String getInativo() {
+        return inativo;
+    }
 
+    public void setInativo(String inativo) {
+        this.inativo = inativo;
+    }
+    
     public void setApto(int apto) {
         this.apto = apto;
     }

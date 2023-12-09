@@ -49,4 +49,8 @@ CREATE TABLE `clientes` (
         REFERENCES clientes (codCliente)
 );
 
+ALTER TABLE pessoas
+ADD COLUMN inativo VARCHAR(255);
+
+
 

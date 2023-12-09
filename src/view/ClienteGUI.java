@@ -134,6 +134,8 @@ public class ClienteGUI extends javax.swing.JFrame {
         btCancelar = new javax.swing.JButton();
         jLabel19 = new javax.swing.JLabel();
         tfCidade = new javax.swing.JTextField();
+        jLabel20 = new javax.swing.JLabel();
+        jlStatus = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Clientes");
@@ -348,7 +350,7 @@ public class ClienteGUI extends javax.swing.JFrame {
         jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/menino2.png"))); // NOI18N
         jLabel15.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        cadastroClientes.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 150, 180));
+        cadastroClientes.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 150, 180));
 
         btSalvar.setText("SALVAR");
         btSalvar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -373,6 +375,16 @@ public class ClienteGUI extends javax.swing.JFrame {
 
         tfCidade.setEnabled(false);
         cadastroClientes.add(tfCidade, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 230, 210, -1));
+
+        jLabel20.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel20.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel20.setText("STATUS:");
+        cadastroClientes.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, -1, -1));
+
+        jlStatus.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jlStatus.setText("___________");
+        jlStatus.setEnabled(false);
+        cadastroClientes.add(jlStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 230, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -554,8 +566,10 @@ public class ClienteGUI extends javax.swing.JFrame {
         } else if (operacao == 2) {
             c.setCodCliente(Integer.parseInt(tfCodigo.getText()));
             String texto = JOptionPane.showInputDialog(null, "Tem certeza que deseja DESABILITAR o cliente???\nIngresse o motivo da desabilitação.");
-            c.setObs(texto);
-
+            
+            c.setInativo(texto);
+            
+            
 	//o metodo excluir, na verdade não exclui oo objeto, ele apenas marco o atributo Ativo como false.
             if (cliente.excluir(c)) {
                 JOptionPane.showMessageDialog(null, "Desabilitado com Sucesso!!");
@@ -629,11 +643,10 @@ public class ClienteGUI extends javax.swing.JFrame {
             ListSelectionModel selectionModel = tbClientes.getSelectionModel();
 
             // Adiciona um MouseListener para tratar o evento de clique
-            tbClientes.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
+            //tbClientes.addMouseListener(new MouseAdapter(){});
+                
                     // Obtém o índice da linha clicada
-                    int rowIndex = tbClientes.rowAtPoint(e.getPoint());
+                    int rowIndex = tbClientes.rowAtPoint(evt.getPoint());
                     // Verifica se o clique foi em uma linha válida
                     if (rowIndex >= 0) {
                         // Define a linha clicada como a linha selecionada
@@ -644,22 +657,30 @@ public class ClienteGUI extends javax.swing.JFrame {
                         tfCelular.setText(String.valueOf(cad.get(rowIndex).getTelefone()));
                         tfCpf.setText(String.valueOf(cad.get(rowIndex).getCpf()));
                         tfRg.setText(String.valueOf(cad.get(rowIndex).getRg()));
-                        tfEndereco.setText(cad.get(rowIndex+1).getEndereco());
+                        tfEndereco.setText(cad.get(rowIndex).getEndereco());
                         tfNumero.setText(String.valueOf(cad.get(rowIndex).getNumero()));
                         tfApto.setText(String.valueOf(cad.get(rowIndex).getApto()));
                         tfBairro.setText(cad.get(rowIndex).getBairro());
                         tfEstado.setText(cad.get(rowIndex).getEstado());
                         tfCep.setText(String.valueOf(cad.get(rowIndex).getCep()));
-                        //tfCidade.setText(cad.get(rowIndex).getCidade());
+                        tfCidade.setText(cad.get(rowIndex).getCidade());
                         tfObservacao.setText(cad.get(rowIndex).getObs());
+                        String status = "";
+                        if(cad.get(rowIndex).isAtivo()){
+                            status = "Desativado!";
+                        }else{
+                            status = "Ativo!";
+                        }
+                        jlStatus.setText(status);
                     }
                     //manipula os botões
                     btNovo.setEnabled(false);
                     btEditar.setEnabled(true);
                     btDesabilitar.setEnabled(true);
                     btCancelar.setEnabled(true);
-                }
-            });
+                    jlStatus.setEnabled(true);
+                
+            
     }//GEN-LAST:event_tbClientesMouseClicked
     //este botão apenas ativa ps campos, manipula os botoes e muda a bandeira para 1 editar
     private void btEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEditarActionPerformed
@@ -736,6 +757,7 @@ public class ClienteGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -748,6 +770,7 @@ public class ClienteGUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JLabel jlStatus;
     private javax.swing.JTable tbClientes;
     private javax.swing.JTextField tfApto;
     private javax.swing.JTextField tfBairro;

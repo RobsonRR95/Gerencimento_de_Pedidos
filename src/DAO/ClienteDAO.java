@@ -38,7 +38,7 @@ public class ClienteDAO implements OperacoesDAO {
             try {
                 Connection conn = ConexaoMySQL.getConexaoMySQL();
                     PreparedStatement ps;
-                ps = conn.prepareStatement("INSERT INTO pessoas (cpf, rg, endereco, numero, estado, telefone, ativo, obs, bairro, cidade, apto, cep, nome) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                ps = conn.prepareStatement("INSERT INTO pessoas (cpf, rg, endereco, numero, estado, telefone, ativo, obs, bairro, cidade, apto, cep, nome, inativo) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
                 ps.setLong(1, p.getCpf());
                 ps.setLong(2, p.getRg());
                 ps.setString(3, p.getEndereco());
@@ -52,6 +52,8 @@ public class ClienteDAO implements OperacoesDAO {
                 ps.setInt(11, p.getApto());
                 ps.setLong(12, p.getCep());
                 ps.setString(13, p.getNome());
+                
+                
                 
                 ps.executeUpdate(); 
                 
@@ -91,13 +93,15 @@ public class ClienteDAO implements OperacoesDAO {
            
            try {
                 Connection conn = ConexaoMySQL.getConexaoMySQL();
-                PreparedStatement ps = conn.prepareStatement("UPDATE pessoas SET ativo='1' WHERE cpf=?");
+                PreparedStatement ps = conn.prepareStatement("UPDATE pessoas SET ativo='1', inativo=? WHERE cpf=?");
                                                                     
-                 
-                ps.setLong(1, cNovo.getCpf());
+                ps.setString(1,cNovo.getInativo()); 
+                ps.setLong(2, cNovo.getCpf());
+                
                                  
-                int rowCount = ps.executeUpdate();        
-                     
+                int rowCount = ps.executeUpdate();  
+                
+                
                 conn.close();
      
                 return true;            
