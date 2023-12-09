@@ -237,7 +237,8 @@ public class ClienteDAO implements OperacoesDAO {
                     c.setBairro(rs.getString(10));
                     c.setCidade(rs.getString(11));
                     c.setApto(rs.getInt(12));
-                    c.setCep(rs.getInt(13));            
+                    c.setCep(rs.getInt(13));
+                    c.setInativo(rs.getString(14));
                     
                     minhaLista.add(c);
                 }         

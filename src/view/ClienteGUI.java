@@ -70,6 +70,7 @@ public class ClienteGUI extends javax.swing.JFrame {
                 tbClientes.setValueAt(cad.get(i).getNumero(), i, 3);
                 tbClientes.setValueAt(cad.get(i).getBairro(), i, 4);
                 tbClientes.setValueAt(cad.get(i).getCidade(), i, 5);
+                tbClientes.setValueAt(cad.get(i).getInativo(), i, 6);
             }
         }
 
@@ -288,11 +289,11 @@ public class ClienteGUI extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Nome", "Telefone", "Endereço", "Número", "Bairro", "Cidade"
+                "Nome", "Telefone", "Endereço", "Número", "Bairro", "Cidade", "Obs Inativo"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -391,7 +392,7 @@ public class ClienteGUI extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(cadastroClientes, javax.swing.GroupLayout.DEFAULT_SIZE, 928, Short.MAX_VALUE)
+                .addComponent(cadastroClientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
