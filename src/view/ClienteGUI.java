@@ -168,7 +168,7 @@ public class ClienteGUI extends javax.swing.JFrame {
         jLabel4.setText("*CPF");
         cadastroClientes.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 110, 61, 30));
 
-        jLabel5.setText("*CELULAR");
+        jLabel5.setText("CELULAR");
         cadastroClientes.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 70, -1, 26));
 
         jLabel6.setText("RG");
@@ -181,7 +181,7 @@ public class ClienteGUI extends javax.swing.JFrame {
         cadastroClientes.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 150, 20, 30));
 
         jLabel9.setText("*BAIRRO/PRAIA");
-        cadastroClientes.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 190, -1, 30));
+        cadastroClientes.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 190, 90, 30));
 
         tfObservacao.setEnabled(false);
         cadastroClientes.add(tfObservacao, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 230, 270, -1));
@@ -397,7 +397,9 @@ public class ClienteGUI extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(cadastroClientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(cadastroClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 640, Short.MAX_VALUE))
         );
 
         pack();
@@ -433,7 +435,7 @@ public class ClienteGUI extends javax.swing.JFrame {
 
     private void btSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarActionPerformed
         String nome = "";
-        long cpf;
+        long cpf = 0;
 
         // esses metodos fazem algumas consistencias nos dados antes de salvar no objeto
         //verifica se o campo tfNome não esta vazio
@@ -453,12 +455,36 @@ public class ClienteGUI extends javax.swing.JFrame {
             
         // aqui foi feito com bloco try catch em conjunto com if verificando campo abrigatorio e se é numerico pela exceção
         try {
-            if (!"".equals(tfCpf.getText())) {
-                cpf = Long.parseLong(tfCpf.getText());
-            } else {
-                JOptionPane.showMessageDialog(null, "O campo CPF é OBRIGATÓRIO!!");
-                return;
+            //se operaçao for para inserir um novo cadastro
+            if(operacao == 0){
+                if (!"".equals(tfCpf.getText())) {
+                    long cpfTemp = Long.parseLong(tfCpf.getText());
+                    Cliente clienteEncontrado = (Cliente) cliente.pesquisar(cpfTemp);
+                    if (clienteEncontrado != null) {
+                        // O CPF foi encontrado, não pode ter cpfs iguais
+                        JOptionPane.showMessageDialog(null, "O campo CPF já está cadastrado!!");
+                        return;
+                    } else {
+                        // O CPF não foi encontrado, tudo certo
+                        cpf = Long.parseLong(tfCpf.getText());
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "O campo CPF é OBRIGATÓRIO!!");
+                    return;
+                }
             }
+            //se operaçao for para editar um cadastro
+            //if(operacao == 1){
+            else{
+                if (!"".equals(tfCpf.getText())) {
+                    cpf = Long.parseLong(tfCpf.getText());
+                    
+                } else {
+                    JOptionPane.showMessageDialog(null, "O campo CPF é OBRIGATÓRIO!!");
+                    return;
+                }
+            }
+            
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "O campo CPF deve ser numérico!!");
             return;
@@ -529,12 +555,17 @@ public class ClienteGUI extends javax.swing.JFrame {
         }
         
         
-        if (!"".equals(tfEstado.getText())){
-            if(!Util.isNumeric(tfEstado.getText())){
+        if (!"".equals(tfEstado.getText())) {
+            if(tfEstado.getText().length() == 2){
+                if(!Util.isNumeric(tfEstado.getText())){
                 c.setEstado(tfEstado.getText());
+                }else{
+                    JOptionPane.showMessageDialog(null, "Erro no campo estado, não é permitido inserir numero neste campo.");
+                    return;
+                }
             }else{
-                JOptionPane.showMessageDialog(null, "Erro no campo estado, não é permitido inserir numero neste campo.");
-                return;
+                JOptionPane.showMessageDialog(null, "Erro no campo estado, insira dois caracteres!");
+                    return;
             }
         }
 
@@ -571,9 +602,11 @@ public class ClienteGUI extends javax.swing.JFrame {
             c.setInativo(texto);
             
             
-	//o metodo excluir, na verdade não exclui oo objeto, ele apenas marco o atributo Ativo como false.
+            //o metodo excluir, na verdade não exclui oo objeto, ele apenas marco o atributo Ativo como false.
             if (cliente.excluir(c)) {
                 JOptionPane.showMessageDialog(null, "Desabilitado com Sucesso!!");
+                dispose();
+                new ClienteGUI().setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(null, "Erro ao Desabilitar o Cliente!!");
             }
@@ -591,13 +624,14 @@ public class ClienteGUI extends javax.swing.JFrame {
         if (cad.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Cadastro vazio");
         } else {
-           //captura o modelo da tabela, cria nova linha e aplica o modelo 
-           if(operacao == 0){
-            DefaultTableModel model = (DefaultTableModel) tbClientes.getModel();
-            Object[] rowData = {""};
-            model.addRow(rowData);
-           }
-           //seta os valores dos atributos do cliente nas colunas da tabela
+            //captura o modelo da tabela, cria nova linha e aplica o modelo 
+            if(operacao == 0){
+                DefaultTableModel model = (DefaultTableModel) tbClientes.getModel();
+                Object[] rowData = {""};
+                model.addRow(rowData);
+            }
+            
+            //seta os valores dos atributos do cliente nas colunas da tabela
             cad = cliente.list();
             for (int i = 0; i <cad.size() ; i++) {
                 
@@ -607,8 +641,8 @@ public class ClienteGUI extends javax.swing.JFrame {
                 tbClientes.setValueAt(cad.get(i).getNumero(), i, 3);
                 tbClientes.setValueAt(cad.get(i).getBairro(), i, 4);
                 tbClientes.setValueAt(cad.get(i).getCidade(), i, 5);
-                }
             }
+        }
         
         //limpa e desativa os campos
         Util.EditarFrame.limparDados(this);
@@ -653,7 +687,8 @@ public class ClienteGUI extends javax.swing.JFrame {
                         // Define a linha clicada como a linha selecionada
                         selectionModel.setSelectionInterval(rowIndex, rowIndex);
                         //Cliente selecionado = (Cliente) cliente.pesquisar(rowIndex);
-                        tfCodigo.setText(String.valueOf(rowIndex));
+                        //tfCodigo.setText(String.valueOf(rowIndex));
+                        tfCodigo.setText(String.valueOf(cad.get(rowIndex).getCodCliente()));
                         tfNome.setText( cad.get(rowIndex).getNome());
                         tfCelular.setText(String.valueOf(cad.get(rowIndex).getTelefone()));
                         tfCpf.setText(String.valueOf(cad.get(rowIndex).getCpf()));
@@ -689,6 +724,7 @@ public class ClienteGUI extends javax.swing.JFrame {
         btSalvar.setEnabled(true);
         btEditar.setEnabled(false);
         btDesabilitar.setEnabled(false);
+        tfCpf.setEnabled(false);
         operacao = 1;
     }//GEN-LAST:event_btEditarActionPerformed
 
@@ -699,6 +735,7 @@ public class ClienteGUI extends javax.swing.JFrame {
         btSalvar.setEnabled(true);
         btEditar.setEnabled(false);
         btDesabilitar.setEnabled(false);
+        tfCpf.setEnabled(false);
         operacao = 2;
     }//GEN-LAST:event_btDesabilitarActionPerformed
 

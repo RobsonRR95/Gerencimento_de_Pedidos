@@ -26,6 +26,12 @@ public class Cliente extends ModelPessoa {
     public Cliente(String nome, long cpf) {
         super(nome, cpf);
     }
+
+    public Cliente() {
+        
+    }
+    
+    
     
     /**
      *

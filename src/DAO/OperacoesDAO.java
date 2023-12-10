@@ -14,7 +14,7 @@ public interface OperacoesDAO {
     
     public boolean excluir (Object obj);
     
-    public Object pesquisar (Object obj);
+    public Object pesquisar (long cpf);
     
     public boolean editar (Object obj);
     

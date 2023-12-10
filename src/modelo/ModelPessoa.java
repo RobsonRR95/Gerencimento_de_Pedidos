@@ -1,5 +1,8 @@
 package modelo;
 
+import DAO.ClienteDAO;
+import java.util.ArrayList;
+
 
 
 
@@ -125,8 +128,8 @@ public abstract class ModelPessoa {
     }
 
  
-    public void setCpf(long pCpf){
-        this.cpf = pCpf;
+    public void setCpf(long cpf){
+        this.cpf = cpf;
     }
  
     public long getCpf(){

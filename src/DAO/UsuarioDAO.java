@@ -40,7 +40,7 @@ public class UsuarioDAO implements OperacoesDAO {
         return false;
     }
 
-    @Override
+    
     //Em obj está o critério de pesquisa
     //Em obj vai estar o nome da pessoa
     public Object pesquisar(Object obj) {
@@ -100,6 +100,11 @@ public class UsuarioDAO implements OperacoesDAO {
 
     public ArrayList<Usuario> getCadastro() {
         return cadastro;
+    }
+
+    @Override
+    public Object pesquisar(long cpf) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
     

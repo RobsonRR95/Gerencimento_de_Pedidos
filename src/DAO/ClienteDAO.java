@@ -38,7 +38,7 @@ public class ClienteDAO implements OperacoesDAO {
             try {
                 Connection conn = ConexaoMySQL.getConexaoMySQL();
                     PreparedStatement ps;
-                ps = conn.prepareStatement("INSERT INTO pessoas (cpf, rg, endereco, numero, estado, telefone, ativo, obs, bairro, cidade, apto, cep, nome, inativo) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+                ps = conn.prepareStatement("INSERT INTO pessoas (cpf, rg, endereco, numero, estado, telefone, ativo, obs, bairro, cidade, apto, cep, nome) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
                 ps.setLong(1, p.getCpf());
                 ps.setLong(2, p.getRg());
                 ps.setString(3, p.getEndereco());
@@ -117,22 +117,22 @@ public class ClienteDAO implements OperacoesDAO {
     //Em obj está o critério de pesquisa
     //Em obj vai estar o nome da pessoa
     @Override
-     public Object pesquisar(Object obj) {
-        if (obj !=null){
-            int cod = (int) obj;
+     public Object pesquisar(long cpf) {
+        //if (obj !=null){
+            //int cod = (int) obj;
             
             
              try {
                 Connection conn = ConexaoMySQL.getConexaoMySQL();
                 PreparedStatement ps = conn.prepareStatement("SELECT * FROM pessoas WHERE cpf=?");
                  
-                ps.setInt(1, cod);
+                ps.setLong(1, cpf);
                 
                 ResultSet rs = ps.executeQuery();
                 
                 if(rs.next()){
                     
-                    long cpf = rs.getLong(1);
+                    cpf = rs.getLong(1);
                     String nome = rs.getString(3);
                     
                     Cliente c  = new Cliente(nome, cpf);
@@ -146,7 +146,7 @@ public class ClienteDAO implements OperacoesDAO {
                     c.setObs(rs.getString(9));
                     c.setBairro(rs.getString(10));
                     c.setCidade(rs.getString(11));
-                     c.setApto(rs.getInt(12));
+                    c.setApto(rs.getInt(12));
                     c.setCep(rs.getInt(13));
                                        
                     return c;
@@ -160,11 +160,11 @@ public class ClienteDAO implements OperacoesDAO {
            } 
             for (int i =0; i< cadastro.size(); i++){
                 Cliente p = (Cliente) cadastro.get(i);
-                if (cod==p.getCodCliente()){
+                if (cpf==p.getCodCliente()){
                     return p;
                 }
             }
-        }
+        
         return null;
     }
 
@@ -221,12 +221,16 @@ public class ClienteDAO implements OperacoesDAO {
                 Connection conn = ConexaoMySQL.getConexaoMySQL();
                 PreparedStatement ps = conn.prepareStatement("SELECT * FROM pessoas");             
                 ResultSet rs = ps.executeQuery();
-
-                    while(rs.next()){  
+                
+                PreparedStatement ps2 = conn.prepareStatement("SELECT * FROM clientes");             
+                ResultSet rs2 = ps2.executeQuery();
+                
+                Cliente c  = new Cliente();
+                
+                while(rs.next() && rs2.next()){ 
                     long cpf = rs.getLong(1);
-                    String nome = rs.getString(3);
-                    Cliente c  = new Cliente(nome, cpf);
-                    
+                    c = new Cliente(rs.getString(3), cpf);
+                    //c.setNome(rs.getString(3));
                     c.setRg(rs.getLong(2));
                     c.setEndereco(rs.getString(4));
                     c.setNumero(rs.getInt(5));
@@ -240,9 +244,15 @@ public class ClienteDAO implements OperacoesDAO {
                     c.setCep(rs.getInt(13));
                     c.setInativo(rs.getString(14));
                     
+                    c.setCodCliente(rs2.getInt(1));
+                    c.setQntPedidos(rs2.getInt(3));
+                    c.setDivida(rs2.getFloat(4));
+                    c.setCredito(rs2.getFloat(5));
+                   
                     minhaLista.add(c);
-                }         
                     
+                }   
+               
                 conn.close();
                 
            } catch (SQLException ex) {
