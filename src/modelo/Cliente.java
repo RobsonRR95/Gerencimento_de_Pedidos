@@ -73,7 +73,7 @@ public class Cliente extends ModelPessoa {
     @Override
     public void gerarCod(Object obj ) {
         
-    try (Connection conn = ConexaoMySQL.getConexaoMySQL()) {
+        try (Connection conn = ConexaoMySQL.getConexaoMySQL()) {
             PreparedStatement ps = conn.prepareStatement("SELECT count(*) FROM clientes");
 
             ResultSet rs = ps.executeQuery();

@@ -168,7 +168,7 @@ public class ClienteGUI extends javax.swing.JFrame {
         jLabel4.setText("*CPF");
         cadastroClientes.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 110, 61, 30));
 
-        jLabel5.setText("*CELULAR");
+        jLabel5.setText("CELULAR");
         cadastroClientes.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 70, -1, 26));
 
         jLabel6.setText("RG");

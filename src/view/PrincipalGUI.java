@@ -12,7 +12,7 @@ package view;
 public class PrincipalGUI extends javax.swing.JFrame {
 
     /**
-     * Creates new form PedidoGUI
+     * Creates new form PedidoGUI2
      */
     public PrincipalGUI() {
         initComponents();
@@ -110,6 +110,16 @@ public class PrincipalGUI extends javax.swing.JFrame {
 
         jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons/table.png"))); // NOI18N
         jMenu1.setText("Pedidos");
+        jMenu1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu1MouseClicked(evt);
+            }
+        });
+        jMenu1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu1ActionPerformed(evt);
+            }
+        });
         jMenuBar1.add(jMenu1);
 
         jMenu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icons/information.png"))); // NOI18N
@@ -156,6 +166,14 @@ public class PrincipalGUI extends javax.swing.JFrame {
     private void jMenu2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu2MouseClicked
         new SobreGUI().setVisible(true);
     }//GEN-LAST:event_jMenu2MouseClicked
+
+    private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
+        new PedidoGUI().setVisible(true);
+    }//GEN-LAST:event_jMenu1ActionPerformed
+
+    private void jMenu1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu1MouseClicked
+        new PedidoGUI().setVisible(true);
+    }//GEN-LAST:event_jMenu1MouseClicked
 
     /**
      * @param args the command line arguments

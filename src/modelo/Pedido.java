@@ -2,17 +2,22 @@ package modelo;
 
 // @author Robson Rosa
 
+import connection.ConexaoMySQL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 
 
 public class Pedido {
 
-    private int codPedido;
+    private int codPedido = 0;
     private float qtd_produto;
     private float valor_produtos;
     private Date entrega;
-    private boolean pagamento;
-    private Date data_pagamento;
+    private boolean pagamento;  
+    private Date data_pagamento = new Date();
 
     public Pedido(int codPedido, float qtd_produto, float valor_produtos, Date entrega, boolean pagamento, Date data_pagamento) {
         this.codPedido = codPedido;
@@ -115,5 +120,21 @@ public class Pedido {
         return "Pedido{" + "codPedido=" + codPedido + ", qtd_produto=" + qtd_produto + ", valor_produtos=" + valor_produtos + ", entrega=" + entrega + ", pagamento=" + pagamento + ", data_pagamento=" + data_pagamento + '}';
     }
     
-    
+    public void gerarCod(Object obj ) {
+        
+        try (Connection conn = ConexaoMySQL.getConexaoMySQL()) {
+            PreparedStatement ps = conn.prepareStatement("SELECT MAX(codPedido) FROM pedidos;");
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                // Extrai o valor do ResultSet e atribui à variável codCliente
+                this.codPedido = rs.getInt(1);
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("Erro: Não consegui gerar o número do pedido");
+            System.out.println(ex);
+        }
+    }
 }
