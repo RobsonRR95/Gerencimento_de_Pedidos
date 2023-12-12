@@ -27,7 +27,7 @@ import modelo.Pedido;
  */
 public class PedidoDAO implements OperacoesDAO {
 
-    ArrayList<Cliente> cadastro = new ArrayList<>();
+    ArrayList<Pedido> cadastro = new ArrayList<>();
        
         /*esse metodo recebe um objeto, verifica se não é nulo, 
 	converte para Pedido ;
@@ -41,7 +41,6 @@ public class PedidoDAO implements OperacoesDAO {
                 Connection conn = ConexaoMySQL.getConexaoMySQL();
                     PreparedStatement ps;
                 ps = conn.prepareStatement("INSERT INTO pedidos (qtd_produto, valor_produtos, entrega, pagamento, data_pagamento) VALUES (?,?,?,?,?)");
-                //ps.setInt(1, p.getCodPedido());
                 ps.setFloat(1, p.getQtd_produto());
                 ps.setFloat(2, p.getValor_produtos());
                 // Converter java.util.Date para java.sql.Date
@@ -75,26 +74,24 @@ public class PedidoDAO implements OperacoesDAO {
     @Override
     public boolean excluir(Object obj) {
         if (obj !=null){
-           Cliente cNovo = (Cliente) obj;
+           Pedido cNovo = (Pedido) obj;
            
            
            try {
                 Connection conn = ConexaoMySQL.getConexaoMySQL();
-                PreparedStatement ps = conn.prepareStatement("UPDATE pessoas SET ativo='1', inativo=? WHERE cpf=?");
+                PreparedStatement ps = conn.prepareStatement("UPDATE pedidos SET ativo='1' WHERE codPedido=?");
                                                                     
-                ps.setString(1,cNovo.getInativo()); 
-                ps.setLong(2, cNovo.getCpf());
-                
+                 
+                ps.setInt(1, cNovo.getCodPedido());
                                  
-                int rowCount = ps.executeUpdate();  
-                
-                
+                ps.executeUpdate();        
+                     
                 conn.close();
      
                 return true;            
                  
            } catch (SQLException ex) {
-                System.out.println("Erro: Não consegui excluir o cliente");
+                System.out.println("Erro: Não consegui excluir o Pedido");
                 System.out.println(ex);
            } 
         }
@@ -103,38 +100,30 @@ public class PedidoDAO implements OperacoesDAO {
 
     //Em obj está o critério de pesquisa
     //Em obj vai estar o nome da pessoa
-    @Override
-     public Object pesquisar(long cpf) {
-        //if (obj !=null){
-            //int cod = (int) obj;
+    //@Override
+     public Object pesquisar(Object obj) {
+        if (obj !=null){
+            int cod = (int) obj;
             
             
              try {
                 Connection conn = ConexaoMySQL.getConexaoMySQL();
-                PreparedStatement ps = conn.prepareStatement("SELECT * FROM pessoas WHERE cpf=?");
+                PreparedStatement ps = conn.prepareStatement("SELECT * FROM pedidos WHERE codPedido=?");
                  
-                ps.setLong(1, cpf);
+                ps.setInt(1, cod);
                 
                 ResultSet rs = ps.executeQuery();
                 
                 if(rs.next()){
                     
-                    cpf = rs.getLong(1);
-                    String nome = rs.getString(3);
+                Pedido c  = new Pedido();
                     
-                    Cliente c  = new Cliente(nome, cpf);
-                    
-                    c.setRg(rs.getLong(2));
-                    c.setEndereco(rs.getString(4));
-                    c.setNumero(rs.getInt(5));
-                    c.setEstado(rs.getString(6));
-                    c.setTelefone(rs.getLong(7));
-                    c.setAtivo(rs.getBoolean(8));
-                    c.setObs(rs.getString(9));
-                    c.setBairro(rs.getString(10));
-                    c.setCidade(rs.getString(11));
-                    c.setApto(rs.getInt(12));
-                    c.setCep(rs.getInt(13));
+                c.setCodPedido(rs.getInt(1));
+                c.setQtd_produto(rs.getFloat(2));
+                c.setValor_produtos(rs.getInt(3));
+                c.setEntrega(rs.getDate(4));
+                c.setPagamento(rs.getBoolean(5));
+                c.setData_pagamento(rs.getDate(6)); 
                                        
                     return c;
                 }         
@@ -145,13 +134,8 @@ public class PedidoDAO implements OperacoesDAO {
                 System.out.println("Erro: Não consegui conectar o no BD");
                 System.out.println(ex);
            } 
-            for (int i =0; i< cadastro.size(); i++){
-                Cliente p = (Cliente) cadastro.get(i);
-                if (cpf==p.getCodCliente()){
-                    return p;
-                }
-            }
-        
+
+        }
         return null;
     }
 
@@ -163,36 +147,28 @@ public class PedidoDAO implements OperacoesDAO {
     @Override
     public boolean editar(Object obj) {
         if (obj !=null){
-           Cliente cNovo = (Cliente) obj;
+           Pedido p = (Pedido) obj;
            
            
            try {
                 Connection conn = ConexaoMySQL.getConexaoMySQL();
-                PreparedStatement ps = conn.prepareStatement("UPDATE pessoas SET rg=?, nome=?, endereco=?, numero=?, estado=?, telefone=?, ativo=?, obs=?, bairro=?, cidade=?, apto=?, cep=? WHERE cpf=?");
+                PreparedStatement ps = conn.prepareStatement("UPDATE pedidos SET Qtd_produto=?, Valor_produtos=?, Pagamento=?, Data_pagamento=? WHERE codPedido=?");
                   
-                
-                ps.setLong(1, cNovo.getRg());
-                ps.setString(2, cNovo.getNome());
-                ps.setString(3, cNovo.getEndereco());
-                ps.setInt(4, cNovo.getNumero());
-                ps.setString(5, cNovo.getEstado());
-                ps.setLong(6,cNovo.getTelefone());
-                ps.setBoolean(7, cNovo.isAtivo());
-                ps.setString(8, cNovo.getObs());
-                ps.setString(9,cNovo.getBairro());
-                ps.setString(10, cNovo.getCidade());
-                ps.setInt(11, cNovo.getApto());
-                ps.setLong(12, cNovo.getCep());
-                ps.setLong(13, cNovo.getCpf());
+                ps.setInt(1, p.getCodPedido());
+                ps.setFloat(2, p.getQtd_produto());
+                ps.setFloat(3, p.getValor_produtos());
+                ps.setDate(4, (Date) p.getEntrega());
+                ps.setBoolean(5, p.isPagamento());
+                ps.setDate(6, (Date) p.getData_pagamento()); 
                                  
-                int rowCount = ps.executeUpdate();        
+                ps.executeUpdate();        
                      
                 conn.close();
      
                 return true;            
                  
            } catch (SQLException ex) {
-                System.out.println("Erro: Não consegui alterar o cliente");
+                System.out.println("Erro: Não consegui alterar o pedido");
                 System.out.println(ex);
            }
         }
@@ -200,46 +176,31 @@ public class PedidoDAO implements OperacoesDAO {
     }
       
    /*esse metodo lista todas as posições do ArrayList*/  
-    public ArrayList<Cliente> list(){
+    public ArrayList<Pedido>list(){
+        System.out.println("Entrou no listar pedidos");
 
-        ArrayList <Cliente> minhaLista = new ArrayList<Cliente>();
+        ArrayList <Pedido> minhaLista = new ArrayList<Pedido>();
 
             try {
                 Connection conn = ConexaoMySQL.getConexaoMySQL();
-                PreparedStatement ps = conn.prepareStatement("SELECT * FROM pessoas");             
+                PreparedStatement ps = conn.prepareStatement("SELECT * FROM pedidos");             
                 ResultSet rs = ps.executeQuery();
-                
-                PreparedStatement ps2 = conn.prepareStatement("SELECT * FROM clientes");             
-                ResultSet rs2 = ps2.executeQuery();
-                
-                Cliente c  = new Cliente();
-                
-                while(rs.next() && rs2.next()){ 
-                    long cpf = rs.getLong(1);
-                    c = new Cliente(rs.getString(3), cpf);
-                    //c.setNome(rs.getString(3));
-                    c.setRg(rs.getLong(2));
-                    c.setEndereco(rs.getString(4));
-                    c.setNumero(rs.getInt(5));
-                    c.setEstado(rs.getString(6));
-                    c.setTelefone(rs.getLong(7));
-                    c.setAtivo(rs.getBoolean(8));
-                    c.setObs(rs.getString(9));
-                    c.setBairro(rs.getString(10));
-                    c.setCidade(rs.getString(11));
-                    c.setApto(rs.getInt(12));
-                    c.setCep(rs.getInt(13));
-                    c.setInativo(rs.getString(14));
+
+                    while(rs.next()){  
+                    Pedido c  = new Pedido ();
                     
-                    c.setCodCliente(rs2.getInt(1));
-                    c.setQntPedidos(rs2.getInt(3));
-                    c.setDivida(rs2.getFloat(4));
-                    c.setCredito(rs2.getFloat(5));
-                   
+                    c.setCodPedido(rs.getInt(1));
+                    c.setQtd_produto(rs.getFloat(2));
+                    c.setValor_produtos(rs.getInt(3));
+                    c.setEntrega(rs.getDate(4));
+                    c.setPagamento(rs.getBoolean(5));
+                    c.setData_pagamento(rs.getDate(6));   
+                    
+                        System.out.println(c.getCodPedido());
+                    
                     minhaLista.add(c);
+                }         
                     
-                }   
-               
                 conn.close();
                 
            } catch (SQLException ex) {
@@ -251,10 +212,18 @@ public class PedidoDAO implements OperacoesDAO {
     }
 
     // esse metodo retorna o cadastro
-    public ArrayList<Cliente> getCadastro() {
+    public ArrayList<Pedido> getCadastro() {
         return cadastro;
+    }
+
+    @Override
+    public Object pesquisar(long cpf) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
     
 
 }
+
+    
+

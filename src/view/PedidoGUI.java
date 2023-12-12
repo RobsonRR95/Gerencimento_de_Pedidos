@@ -23,11 +23,13 @@ public class PedidoGUI extends javax.swing.JFrame {
 
     //instancia um novo objeto ClienteDAO para dar acesso aos metodos dos clientes
     ClienteDAO clienteDao = new ClienteDAO();
-    
+    PedidoClienteDAO pedidoClienteDao = new PedidoClienteDAO();
     PedidoDAO pedidoDao = new PedidoDAO();
 
-    //recupera os dados do cadastro para dentro do ArrayList cad
+    //recupera os dados do cadastro para dentro do ArrayList 
     ArrayList<Cliente> cad = clienteDao.list();
+    ArrayList<Pedido> listaCadPedido = pedidoDao.list();
+    ArrayList<PedidoCliente> listaPedidoCliente = pedidoClienteDao.list();
     
     //sinaliza a bandeira
     int operacao = 1;
@@ -41,42 +43,45 @@ public class PedidoGUI extends javax.swing.JFrame {
         
         initComponents();
         
-
-        /* aqui gera os primeiros clientes pra não começar em branco
-	fizemos um for bem simples, somente para ter dados no inicio
+            //ArrayList<Pedido> cad = pedido.list();
         
-        for (int i = 0; i < 5; i++) {
-            Cliente novo = new Cliente("Cliente " + i, 00 + i);
-            novo.setEnderco("rua " + i * 2);
-            novo.setTelefone(519703838);
-            novo.setNumero(i + 5);
-            novo.setBairro("Centro");
-            novo.setCidade("Osório");
-            novo.setAtivo(true);
+            if (listaCadPedido.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Sem Pedidos");
+            } else {
 
-            clienteDao.inserir(novo);
-            novo.gerarCod(cad);
-        }*/
-
-        // aqui verifica se o ArrayList não esta vazio, caso não esteja já popula a jtable
-         ArrayList<Cliente> cad = clienteDao.list();
-         
-         if (cad.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Cadastro vazio");
-        } else {
-            for (int i = 0; i < cad.size(); i++) {
-                DefaultTableModel model = (DefaultTableModel) tbClientes.getModel();
+               for (int i = 0; i < listaCadPedido.size(); i++) {
+                DefaultTableModel model = (DefaultTableModel) tbPedidos.getModel();
                 Object[] rowData = {""};
                 model.addRow(rowData);
-                tbClientes.setValueAt(cad.get(i).getNome(), i, 0);
-                tbClientes.setValueAt(cad.get(i).getTelefone(), i, 1);
-                tbClientes.setValueAt(cad.get(i).getEnderco(), i, 2);
-                tbClientes.setValueAt(cad.get(i).getNumero(), i, 3);
-                tbClientes.setValueAt(cad.get(i).getBairro(), i, 4);
-                tbClientes.setValueAt(cad.get(i).getCidade(), i, 5);
-                tbClientes.setValueAt(cad.get(i).getInativo(), i, 6);
+                tbPedidos.setValueAt(listaCadPedido.get(i).getCodPedido(), i, 0);
+                
+                tbPedidos.setValueAt(listaCadPedido.get(i).getQtd_produto(), i, 2);
+                tbPedidos.setValueAt(listaCadPedido.get(i).getValor_produtos(), i, 3);
+                tbPedidos.setValueAt(listaCadPedido.get(i).getData_pagamento(), i, 4);
             }
         }
+        
+
+//        // aqui verifica se o ArrayList não esta vazio, caso não esteja já popula a jtable
+//        ArrayList<PedidoCliente> listaPedidoCliente = pedidoClienteDao.list();
+//         
+//         if (listaPedidoCliente.isEmpty()) {
+//            JOptionPane.showMessageDialog(null, "Cadastro vazio");
+//        } else {
+//            for (int i = 0; i < listaPedidoCliente.size(); i++) {
+//                DefaultTableModel model = (DefaultTableModel) tbClientePedido.getModel();
+//                Object[] rowData = {""};
+//                model.addRow(rowData);
+//                System.out.println(listaPedidoCliente.get(i));
+//                tbClientePedido.setValueAt(listaPedidoCliente.get(i).getFk_codCliente(), i, 0);
+//                //tbClientePedido.setValueAt(listaPedidoCliente.get(i).getTelefone(), i, 1);
+//                tbClientePedido.setValueAt(listaPedidoCliente.get(i).getFk_codPedido(), i, 2);
+////                tbClientePedido.setValueAt(listaPedidoCliente.get(i).getNumero(), i, 3);
+////                tbClientePedido.setValueAt(listaPedidoCliente.get(i).getBairro(), i, 4);
+////                tbClientePedido.setValueAt(listaPedidoCliente.get(i).getCidade(), i, 5);
+////                tbClientePedido.setValueAt(listaPedidoCliente.get(i).getInativo(), i, 6);
+//            }
+//        }
          
         
          
@@ -120,7 +125,7 @@ public class PedidoGUI extends javax.swing.JFrame {
         btEditar = new javax.swing.JButton();
         btExcluirPedido = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tbClientes = new javax.swing.JTable();
+        tbClientePedido = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
         tfCodigoPedido = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -134,6 +139,8 @@ public class PedidoGUI extends javax.swing.JFrame {
         jComboBoxClientes = new javax.swing.JComboBox<>();
         btAlterarStatusPagamentoSalvar = new javax.swing.JButton();
         btAlterarStatusPagamento = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tbPedidos = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Gerenciamento de Pedidos");
@@ -244,37 +251,30 @@ public class PedidoGUI extends javax.swing.JFrame {
 
         cadastroClientes.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 150, 120, 200));
 
-        tbClientes.setModel(new javax.swing.table.DefaultTableModel(
+        tbClientePedido.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Nome", "Telefone", "Endereço", "Número", "Bairro", "Cidade", "Obs Inativo"
+                "Cod do Cliente", "Nome do Cliente", "Cod do Pedido", "Qtd de de Produtos", "Valor Produtos", "Data da Entrega", "Data Pagamento", "Status Pagamento"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        tbClientes.addMouseListener(new java.awt.event.MouseAdapter() {
+        tbClientePedido.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbClientesMouseClicked(evt);
+                tbClientePedidoMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tbClientes);
-        if (tbClientes.getColumnModel().getColumnCount() > 0) {
-            tbClientes.getColumnModel().getColumn(0).setPreferredWidth(4);
-            tbClientes.getColumnModel().getColumn(1).setPreferredWidth(200);
-            tbClientes.getColumnModel().getColumn(2).setPreferredWidth(70);
-            tbClientes.getColumnModel().getColumn(3).setPreferredWidth(150);
-            tbClientes.getColumnModel().getColumn(4).setPreferredWidth(2);
-        }
+        jScrollPane1.setViewportView(tbClientePedido);
 
-        cadastroClientes.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 350, 910, 280));
+        cadastroClientes.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 350, 240, 280));
 
         jPanel4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -345,7 +345,6 @@ public class PedidoGUI extends javax.swing.JFrame {
 
         jlStatusPagamento.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jlStatusPagamento.setText("______________");
-        jlStatusPagamento.setEnabled(false);
         cadastroClientes.add(jlStatusPagamento, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 70, 90, 20));
 
         jComboBoxClientes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione Cliente" }));
@@ -379,6 +378,31 @@ public class PedidoGUI extends javax.swing.JFrame {
             }
         });
         cadastroClientes.add(btAlterarStatusPagamento, new org.netbeans.lib.awtextra.AbsoluteConstraints(712, 70, 70, -1));
+
+        tbPedidos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Cod do Pedido", "Nome Cliente", "Qtd Produtos", "Valor Produtos", "Data Pagamento"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbPedidos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbPedidosMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tbPedidos);
+
+        cadastroClientes.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 350, 660, 280));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -425,7 +449,7 @@ public class PedidoGUI extends javax.swing.JFrame {
         btSalvar.setEnabled(false);
         btCancelar.setEnabled(false);
         tfCodigoPedido.setText("");
-        tbClientes.setVisible(true);
+        tbPedidos.setVisible(true);
         tfNome.requestFocus();
         btAlterarStatusPagamento.setEnabled(false);
         jComboBoxClientes.setEnabled(false);
@@ -488,7 +512,7 @@ public class PedidoGUI extends javax.swing.JFrame {
         if(!"".equals(dataEntregaTemp)){
             try {
                 // Criar um formato de data
-                SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat formatoData = new SimpleDateFormat("yyyy-MM-dd");
 
                 // Converter o texto para um objeto Date
                 Date dataEntrega = formatoData.parse(dataEntregaTemp);
@@ -497,7 +521,7 @@ public class PedidoGUI extends javax.swing.JFrame {
                 
             } catch (ParseException e) {
                 // Tratar a exceção se o formato da data estiver incorreto
-                JOptionPane.showMessageDialog(null, "Erro no campo DATA DA ENTREGA, DIGITE CORRETAMENTE! (dd/MM/yyyy)");
+                JOptionPane.showMessageDialog(null, "Erro no campo DATA DA ENTREGA, DIGITE CORRETAMENTE! (yyyy-MM-dd)");
                 return;
             }
         }else{
@@ -510,7 +534,7 @@ public class PedidoGUI extends javax.swing.JFrame {
         if(!"".equals(dataPagamentoTemp)){
             try {
                 // Criar um formato de data
-                SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+                SimpleDateFormat formatoData = new SimpleDateFormat("yyyy-MM-dd");
 
                 // Converter o texto para um objeto Date
                 Date dataPagamento = formatoData.parse(dataPagamentoTemp);
@@ -519,12 +543,12 @@ public class PedidoGUI extends javax.swing.JFrame {
                 
             } catch (ParseException e) {
                 // Tratar a exceção se o formato da data estiver incorreto
-                JOptionPane.showMessageDialog(null, "Erro no campo DATA PAGAMENTO, DIGITE CORRETAMENTE! (dd/MM/yyyy)");
+                JOptionPane.showMessageDialog(null, "Erro no campo DATA PAGAMENTO, DIGITE CORRETAMENTE! (yyyy-MM-dd)");
                 return;
             }
         }
         
-        // pega codigo do clienteDao do clienteDao selecionado
+        // pega codigo do cliente selecionado
             String codClienteTemp = jComboBoxClientes.getSelectedItem().toString();
         
             //converte para inteiro
@@ -544,13 +568,24 @@ public class PedidoGUI extends javax.swing.JFrame {
 
             // converte para int
             int codClienteSelecionado = Integer.parseInt(numeros.toString());
-                    
-              
+            
+            PedidoCliente pedidoCliente = new PedidoCliente();
+            pedidoCliente.setFk_codCliente(codClienteSelecionado);
+            
+            // pega o codigo do pedido
+            int codPedido = Integer.parseInt(tfCodigoPedido.getText());
+            pedidoCliente.setFk_codPedido(codPedido);
+            
             //aqui é verificada qual o botão e chamado o metodo correspondente, 0 inserir, 1 editar ou 2 excluir
             if (operacao == 0) {
                 if (pedidoDao.inserir(pedido)) {
-                    JOptionPane.showMessageDialog(null, "Inserido com sucesso!!");
                     //pedido.gerarCod(cad);
+                    
+                    if(pedidoClienteDao.inserir(pedidoCliente)){
+                        JOptionPane.showMessageDialog(null, "Inserido com sucesso!!");
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Erro na inserção do Pedido, ao fazer o relacionamento!!");
+                    }
                 } else {
                     JOptionPane.showMessageDialog(null, "Erro na inserção do Pedido!!");
                 }
@@ -561,79 +596,88 @@ public class PedidoGUI extends javax.swing.JFrame {
 //                } else {
 //                    JOptionPane.showMessageDialog(null, "Erro ao alterar o Cliente!!");
 //                }
-//            } else if (operacao == 2) {
-//                c.setCodCliente(Integer.parseInt(tfCodigoPedido.getText()));
-//                String texto = JOptionPane.showInputDialog(null, "Tem certeza que deseja DESABILITAR o cliente???\nIngresse o motivo da desabilitação.");
-//
-//                c.setInativo(texto);
-//
-//                //o metodo excluir, na verdade não exclui oo objeto, ele apenas marco o atributo Ativo como false.
-//                if (clienteDao.excluir(c)) {
-//                    JOptionPane.showMessageDialog(null, "Desabilitado com Sucesso!!");
-//                    dispose();
-//                    new PedidoGUI().setVisible(true);
-//                } else {
-//                    JOptionPane.showMessageDialog(null, "Erro ao Desabilitar o Cliente!!");
-//                }
+            } else if (operacao == 2) {
+                pedido.setCodPedido(Integer.parseInt(tfCodigoPedido.getText()));
+                String texto = JOptionPane.showInputDialog(null, "Tem certeza que deseja EXCLUIR o PEDIDO???\nIngresse o motivo.");
+
+                //pedido.setInativo(texto);
+
+                //o metodo excluir, na verdade não exclui oo objeto, ele apenas marco o atributo Ativo como false.
+                if (pedidoDao.excluir(pedido)) {
+                    if (pedidoDao.excluir(pedido)) {
+                    JOptionPane.showMessageDialog(null, "Excluido com Sucesso!!");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Erro ao Excluir o Pedido!!");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Erro ao Excluir o Pedido!!");
+                }
             }
             
-
-            //manipulação dos botões
-            btNovo.setEnabled(true);
-            btEditar.setEnabled(true);
-            btExcluirPedido.setEnabled(true);
-            btSalvar.setEnabled(false);
-            btCancelar.setEnabled(false);
-            tfNome.requestFocus();
+            dispose();
+            new PedidoGUI().setVisible(true);
+//
+//            //manipulação dos botões
+//            btNovo.setEnabled(true);
+//            btEditar.setEnabled(true);
+//            btExcluirPedido.setEnabled(true);
+//            btSalvar.setEnabled(false);
+//            btCancelar.setEnabled(false);
+//            jComboBoxClientes.setEnabled(false);
+//            btAlterarStatusPagamento.setEnabled(false);
 
             //aqui ele verifica se o ArrayList não é vazio
-            if (cad.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Cadastro vazio");
-            } else {
-                //captura o modelo da tabela, cria nova linha e aplica o modelo
-                if(operacao == 0){
-                    DefaultTableModel model = (DefaultTableModel) tbClientes.getModel();
-                    Object[] rowData = {""};
-                    model.addRow(rowData);
-                }
-
-                //seta os valores dos atributos do clienteDao nas colunas da tabela
-                cad = clienteDao.list();
-                for (int i = 0; i <cad.size() ; i++) {
-
-                    tbClientes.setValueAt(cad.get(i).getNome(), i, 0);
-                    tbClientes.setValueAt(cad.get(i).getTelefone(), i, 1);
-                    tbClientes.setValueAt(cad.get(i).getEnderco(), i, 2);
-                    tbClientes.setValueAt(cad.get(i).getNumero(), i, 3);
-                    tbClientes.setValueAt(cad.get(i).getBairro(), i, 4);
-                    tbClientes.setValueAt(cad.get(i).getCidade(), i, 5);
-                }
-            }
-
-            //limpa e desativa os campos
-            Util.EditarFrame.limparDados(this);
-            Util.EditarFrame.desativaCampos(this);
-
-            //manipula os botoes
-            tfCodigoPedido.setText("");
-            btEditar.setEnabled(false);
-            btExcluirPedido.setEnabled(false);
-            btSalvar.setText("SALVAR");
-            btSalvar.setEnabled(false);
-            tbClientes.setVisible(true);
-            operacao = 1;
+//            if (listaCadPedido.isEmpty()) {
+//                JOptionPane.showMessageDialog(null, "Nenhum pedido Cadastrado");
+//            } else {
+//                //captura o modelo da tabela, cria nova linha e aplica o modelo
+//                if(operacao == 0){
+//                    DefaultTableModel model = (DefaultTableModel) tbPedidos.getModel();
+//                    Object[] rowData = {""};
+//                    model.addRow(rowData);
+//                }
+//                
+//                //seta os valores dos atributos do clienteDao nas colunas da tabela
+//                listaCadPedido = null;
+//                listaCadPedido = pedidoDao.list();
+//
+//                for (int i = 0; i < listaCadPedido.size(); i++) {
+//                    DefaultTableModel model = (DefaultTableModel) tbPedidos.getModel();
+//                    Object[] rowData = {""};
+//                    model.addRow(rowData);
+//                    tbPedidos.setValueAt(listaCadPedido.get(i).getCodPedido(), i, 0);
+//
+//                    tbPedidos.setValueAt(listaCadPedido.get(i).getQtd_produto(), i, 2);
+//                    tbPedidos.setValueAt(listaCadPedido.get(i).getValor_produtos(), i, 3);
+//                    tbPedidos.setValueAt(listaCadPedido.get(i).getData_pagamento(), i, 4);
+//                }
+//                
+//            }
+//
+//            //limpa e desativa os campos
+//            Util.EditarFrame.limparDados(this);
+//            Util.EditarFrame.desativaCampos(this);
+//
+//            //manipula os botoes
+//            tfCodigoPedido.setText("");
+//            btEditar.setEnabled(false);
+//            btExcluirPedido.setEnabled(false);
+//            btSalvar.setText("SALVAR");
+//            btSalvar.setEnabled(false);
+//            tbClientePedido.setVisible(true);
+//            operacao = 1;
     }//GEN-LAST:event_btSalvarActionPerformed
 
-    private void tbClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbClientesMouseClicked
+    private void tbClientePedidoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbClientePedidoMouseClicked
 
         // Obtém o modelo de seleção de linha da JTable
-        ListSelectionModel selectionModel = tbClientes.getSelectionModel();
+        ListSelectionModel selectionModel = tbClientePedido.getSelectionModel();
 
         // Adiciona um MouseListener para tratar o evento de clique
         //tbClientes.addMouseListener(new MouseAdapter(){});
 
         // Obtém o índice da linha clicada
-        int rowIndex = tbClientes.rowAtPoint(evt.getPoint());
+        int rowIndex = tbClientePedido.rowAtPoint(evt.getPoint());
         // Verifica se o clique foi em uma linha válida
         if (rowIndex >= 0) {
             // Define a linha clicada como a linha selecionada
@@ -668,16 +712,16 @@ public class PedidoGUI extends javax.swing.JFrame {
         btCancelar.setEnabled(true);
         jlStatusPagamento.setEnabled(true);
 
-    }//GEN-LAST:event_tbClientesMouseClicked
+    }//GEN-LAST:event_tbClientePedidoMouseClicked
 
     //este botão apenas ativa ps campos, manipula os botoes e muda a bandeira para 2 excluir
     private void btExcluirPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExcluirPedidoActionPerformed
-        util.Util.EditarFrame.ativaCampos(this);
-        btSalvar.setText("DESABILITAR");
+        //util.Util.EditarFrame.ativaCampos(this);
+        btSalvar.setText("Excluir Pedido");
         btSalvar.setEnabled(true);
         btEditar.setEnabled(false);
         btExcluirPedido.setEnabled(false);
-        tfCpf.setEnabled(false);
+        
         operacao = 2;
     }//GEN-LAST:event_btExcluirPedidoActionPerformed
 
@@ -688,18 +732,20 @@ public class PedidoGUI extends javax.swing.JFrame {
         btEditar.setEnabled(false);
         btExcluirPedido.setEnabled(false);
         tfCpf.setEnabled(false);
+        btAlterarStatusPagamento.setEnabled(true);
+        tbPedidos.setVisible(false);
         operacao = 1;
     }//GEN-LAST:event_btEditarActionPerformed
 
     private void btNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btNovoActionPerformed
-
+        
         //inicializa select de clientes
         jComboBoxClientes.removeAllItems();
         for (int i=0; i< cad.size(); i++) {
             String clienteMaisCpf = cad.get(i).getCodCliente() + " - " + cad.get(i).getNome();
             jComboBoxClientes.addItem(clienteMaisCpf);
         }
-
+        
         // bandeira para usar o mesmo botao de salvar
         operacao = 0;
 
@@ -717,9 +763,10 @@ public class PedidoGUI extends javax.swing.JFrame {
         tfCodigoPedido.setText("" + codigo);
         jComboBoxClientes.setEnabled(true);
         jComboBoxClientes.requestFocus();
-        tbClientes.setVisible(false);
+        tbClientePedido.setVisible(false);
         btAlterarStatusPagamento.setEnabled(true);
         jlStatusPagamento.setText("Pendente");
+        tbPedidos.setVisible(false);
         
 
         // limpas e ativa os campos
@@ -735,6 +782,82 @@ public class PedidoGUI extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_btAlterarStatusPagamentoActionPerformed
+
+    private void tbPedidosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbPedidosMouseClicked
+
+        
+        // Obtém o modelo de seleção de linha da JTable
+        ListSelectionModel selectionModel = tbPedidos.getSelectionModel();
+
+        // Adiciona um MouseListener para tratar o evento de clique
+        //tbClientes.addMouseListener(new MouseAdapter(){});
+
+        // Obtém o índice da linha clicada
+        int rowIndex = tbPedidos.rowAtPoint(evt.getPoint());
+        // Verifica se o clique foi em uma linha válida
+        if (rowIndex >= 0) {
+            // Define a linha clicada como a linha selecionada
+            selectionModel.setSelectionInterval(rowIndex, rowIndex);
+            //Cliente selecionado = (Cliente) clienteDao.pesquisar(rowIndex);
+            //tfCodigo.setText(String.valueOf(rowIndex));
+            jComboBoxClientes.removeAllItems();
+            PedidoCliente pedidoClienteSelecionados = (PedidoCliente) pedidoClienteDao.pesquisar(listaCadPedido.get(rowIndex).getCodPedido());
+            String codCliente = "" + pedidoClienteSelecionados.getFk_codCliente();
+            jComboBoxClientes.addItem(codCliente);
+            tfCodigoPedido.setText(String.valueOf(listaCadPedido.get(rowIndex).getCodPedido()));
+            tfDataEntrega.setText(String.valueOf(listaCadPedido.get(rowIndex).getEntrega()));
+            
+            tfValorProdutos.setText(String.valueOf(listaCadPedido.get(rowIndex).getValor_produtos()));
+            
+            tfQtdProdutos.setText(String.valueOf(listaCadPedido.get(rowIndex).getQtd_produto()));
+            
+            tfDataPagamento.setText(listaCadPedido.get(rowIndex).getData_pagamento().toString());
+            
+           
+            
+            if(listaCadPedido.get(rowIndex).isPagamento()){
+                jlStatusPagamento.setText("Pago");
+            }else{
+                jlStatusPagamento.setText("Pendente");
+            }
+            
+        }
+        //manipula os botões
+        btNovo.setEnabled(false);
+        btEditar.setEnabled(true);
+        btExcluirPedido.setEnabled(true);
+        btCancelar.setEnabled(true);
+        jlStatusPagamento.setEnabled(true);
+        
+        
+        
+//        // Obtém o modelo de seleção de linha da JTable
+//        ListSelectionModel selectionModel = tbPedidos.getSelectionModel();
+//
+//        // Adiciona um MouseListener para tratar o evento de clique
+//        tbPedidos.addMouseListener(new MouseAdapter() {
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                // Obtém o índice da linha clicada
+//                int rowIndex = tbPedidos.rowAtPoint(e.getPoint());
+//                // Verifica se o clique foi em uma linha válida
+//
+//                Pedido p = new Pedido();
+//
+//                if (rowIndex >= 0) {
+//                    // Define a linha clicada como a linha selecionada
+//                    selectionModel.setSelectionInterval(rowIndex, rowIndex);
+//                    //Cliente selecionado =  pedido.pesquisar(cad.get(rowIndex.getCpf()));
+//                    p.setCodPedido( listaCadPedido.get(rowIndex).getCodPedido());
+//                    p.setQtd_produto(listaCadPedido.get(rowIndex).getQtd_produto());
+//                    p.setValor_produtos(listaCadPedido.get(rowIndex).getValor_produtos());
+//                    p.setEntrega(listaCadPedido.get(rowIndex).getEntrega());
+//                    p.setPagamento(listaCadPedido.get(rowIndex).isPagamento());
+//                    p.setData_pagamento(listaCadPedido.get(rowIndex).getData_pagamento());
+//                }
+//            }
+//        });
+    }//GEN-LAST:event_tbPedidosMouseClicked
 
    
    //o metodo main basicamente chama a view ClienteGUI
@@ -796,9 +919,11 @@ public class PedidoGUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JLabel jlStatusPagamento;
-    private javax.swing.JTable tbClientes;
+    private javax.swing.JTable tbClientePedido;
+    private javax.swing.JTable tbPedidos;
     private javax.swing.JTextField tfApto;
     private javax.swing.JTextField tfBairro;
     private javax.swing.JTextField tfCep;

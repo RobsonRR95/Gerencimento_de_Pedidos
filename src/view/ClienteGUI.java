@@ -723,6 +723,7 @@ public class ClienteGUI extends javax.swing.JFrame {
         btEditar.setEnabled(false);
         btDesabilitar.setEnabled(false);
         tfCpf.setEnabled(false);
+        tbClientes.setVisible(false);
         operacao = 1;
     }//GEN-LAST:event_btEditarActionPerformed
 

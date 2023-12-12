@@ -74,7 +74,7 @@ public class Cliente extends ModelPessoa {
     public void gerarCod(Object obj ) {
         
         try (Connection conn = ConexaoMySQL.getConexaoMySQL()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT count(*) FROM clientes");
+            PreparedStatement ps = conn.prepareStatement("SELECT MAX(codCliente) FROM clientes;");
 
             ResultSet rs = ps.executeQuery();
 
@@ -84,7 +84,7 @@ public class Cliente extends ModelPessoa {
             }
 
         } catch (SQLException ex) {
-            System.out.println("Erro: Não consegui gerar o número do pedido");
+            System.out.println("Erro: Não consegui gerar o codigo de cliente");
             System.out.println(ex);
         }
     }

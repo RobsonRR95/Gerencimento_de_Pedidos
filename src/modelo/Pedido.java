@@ -7,7 +7,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.JOptionPane;
 
 
 public class Pedido {
@@ -77,6 +80,20 @@ public class Pedido {
      * @return the entrega
      */
     public Date getEntrega() {
+//        String dataEntregaTemp = "" + entrega;
+//        
+//        try {
+//            // Criar um formato de data
+//            SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+//
+//            // Converter o texto para um objeto Date
+//            Date dataEntrega = formatoData.parse(dataEntregaTemp);
+//            
+//            return dataEntrega;
+//        } catch (ParseException e) {
+//                System.out.println(e);
+//        }    
+        
         return entrega;
     }
 
